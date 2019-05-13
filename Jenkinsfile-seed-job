@@ -1,0 +1,26 @@
+node {
+    stage('job 1') {
+        jobDsl scriptText: '''
+            pipelineJob('job 1'){
+                concurrentBuild(false)
+                triggers {
+                    githubPush()
+                }
+                definition {
+                    cpsScm {
+                        scriptPath('Jenkins/Jenkinsfile-dev')
+                        scm {
+                            git {
+                                branch('master')
+                                remote {
+                                    github('tbatty7/seventh-service', 'ssh')
+                                    credentials('seventh-service')
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            '''
+    }
+}
